@@ -29,7 +29,7 @@ function maiorValorDeUmaLista(lista) {
   return Math?.max?.apply(null, lista)
 }
 
-module.exports =  {
+export default  {
   receberValorDoInputPreco,
   enviarValorParaInputPreco,
   formatarMoedaRealComCifrao,

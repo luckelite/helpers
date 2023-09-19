@@ -1,14 +1,12 @@
-const datas = require('./helpers/datas');
-const formatarPrecos = require('./helpers/formatarPrecos');
-const mobile = require('./helpers/mobile');
-const validacoes = require('./helpers/validacoes');
-const formatarTextos = require('./helpers/formatarTextos');
+import datas from './helpers/datas';
+import formatarPrecos from './helpers/formatarPrecos';
+import mobile from './helpers/mobile';
+import validacoes from './helpers/validacoes';
+import formatarTextos from './helpers/formatarTextos';
 
-module.exports = {
-    helperPreco: formatarPrecos,
-    helperData: datas,
-    helperMobile: mobile,
-    helperValidar: validacoes,
-    helperTexto: formatarTextos
-}
+export const helperPreco = formatarPrecos;
+export const helperData = datas;
+export const helperMobile = mobile;
+export const helperValidar = validacoes;
+export const helperTexto = formatarTextos;
 
