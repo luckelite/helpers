@@ -1,0 +1,25 @@
+{
+  "name": "lib-helpers",
+  "version": "1.0.0",
+  "description": "helpers",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luckelite/helpers.git"
+  },
+  "keywords": [
+    "helpers"
+  ],
+  "author": "Lucas-dev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/luckelite/helpers/issues"
+  },
+  "homepage": "https://github.com/luckelite/helpers#readme",
+  "dependencies": {
+    "moment": "^2.29.4"
+  }
+}
