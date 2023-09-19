@@ -35,7 +35,7 @@ const empty = (content) => {
   return false
 }
 
-export default {
+module.exports =  {
   email,
   cep,
   cpf,

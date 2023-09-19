@@ -252,7 +252,7 @@ function receberFusoHorario () {
   return Intl.DateTimeFormat().resolvedOptions().timeZone
 }
 
-export default {
+module.exports =  {
   diferencaDeDiasEntreDatas,
   dataHoje,
   converterMesParaNome,

@@ -48,7 +48,7 @@ function limparState(state) {
   }
 }
 
-export default {
+module.exports = {
   limparAcentos,
   limparState,
   removerCaracteresEspeciais,
