@@ -14,10 +14,10 @@ const SEMANA_NOME_COMPLETO = ["Domingo", "Segunda-feira", "Terça-feira", "Quart
 // Funcoes Gerais
 //
 
-function diferencaDeDiasEntreDatas (dataAtual, dataFutura) {
-  if(!dataAtual || !dataFutura) return
+function diferencaDeDiasEntreDatas (dataAtual, dataAtual) {
+  if(!dataAtual || !dataAtual) return
 
-  const diferenca = moment(dataFutura, "DD/MM/YYYY HH:mm:ss").diff(moment(dataAtual, "DD/MM/YYYY HH:mm:ss"))
+  const diferenca = moment(dataAtual, "DD/MM/YYYY HH:mm:ss").diff(moment(dataAtual, "DD/MM/YYYY HH:mm:ss"))
   const diasRestantes = Math.round(moment.duration(diferenca).asDays())
   return (diasRestantes < 0) ? 0 : diasRestantes
 
@@ -85,20 +85,6 @@ function voltarMes (ano, mes) {
   return { mes, ano }
 }
 
-function voltarMesLimitado (ano, mes) {
-  if (mes > 1) {
-    mes--
-    return { mes, ano }
-  }
-}
-
-function avancarMesLimitado (ano, mes) {
-  if (mes < 12) {
-    mes++
-    return { mes, ano }
-  }
-}
-
 //
 // Funcoes do Componente Voltar & Avancar Dia
 //
@@ -130,12 +116,12 @@ function voltarDia (ano, mes, dia) {
 // Funcoes Input Date
 //
 
-function enviarInputDateParaServidor (date) {
+function converterDataInputParaServidor (date) {
   if(!date) return
   return addHoras(moment(date).toDate(), 12)
 }
 
-function exibirDataServidorNoInputDate (date) {
+function converterDataServidorParaInput (date) {
   const data = moment(date).toDate()
   return printDateUSA(data)
 }
@@ -144,7 +130,6 @@ function receberDataDoServidor (date) {
   if(!date) return
   return addHoras(moment(date).toDate(), -12)
 }
-
 
 //
 // Moment JS
@@ -199,7 +184,7 @@ function removeDias (data, dias) {
 // Print
 //
 
-function formatarData (data) {
+function formatarDataSemHora (data) {
   if(!data) return
   const formato = 'DD/MM/YYYY'
   return moment(data).format(formato)
@@ -211,15 +196,15 @@ function formatarDataComHora (data) {
   return moment(data).format(formato)
 }
 
-function printDateUSA (data) {
+function formatarDataAbreviada (data) {
   if(!data) return
-  const formato = 'YYYY-MM-DD'
+  const formato = 'DD/MM'
   return moment(data).format(formato)
 }
 
-function formatarDataReduzida (data) {
+function printDateUSA (data) {
   if(!data) return
-  const formato = 'DD/MM'
+  const formato = 'YYYY-MM-DD'
   return moment(data).format(formato)
 }
 
@@ -227,11 +212,11 @@ function formatarDataReduzida (data) {
 // String
 //
 
-function dataStringBRtoDate (dataStringBR) {
+function converterDataUSAParaBR (dataStringBR) {
   return moment(dataStringBR, "DD/MM/YYYY").toDate()
 }
 
-function dataStringUSAtoDate (dataStringBR) {
+function converterDataBRParaUSA (dataStringBR) {
   return moment(dataStringBR, "YYYY-MM-DD").toDate()
 }
 
@@ -239,9 +224,9 @@ function dataStringUSAtoDate (dataStringBR) {
 // Object
 //
 
-function dataObjtoDate (ano, mes, dia = 1) {
+function converterObjDataParaString (ano, mes, dia = 1) {
   const stringDataBR = `${dia}-${mes}-${ano}`
-  return dataStringBRtoDate(stringDataBR)
+  return converterDataUSAParaBR(stringDataBR)
 }
 
 //
@@ -252,6 +237,36 @@ function receberFusoHorario () {
   return Intl.DateTimeFormat().resolvedOptions().timeZone
 }
 
+function acrescentarTempoNaDataAtual (dias = 0, horas = 0, minutos = 0) {
+  const dataAgora = new Date()
+
+  dataAgora.setDate(dataAgora.getDate() + dias)
+  dataAgora.setHours(dataAgora.getHours() + horas)
+  dataAgora.setMinutes(dataAgora.getMinutes() + minutos)
+
+  const agora = new Date()
+  agora.setHours(0, 0, 0, 0)
+
+  const amanha = new Date(agora)
+  amanha.setDate(agora.getDate() + 1)
+
+  const formatoHora = {
+    hour: '2-digit',
+    minute: '2-digit',
+  }
+
+  if (dataAgora.toDateString() === agora.toDateString()) return `hoje às ${dataAgora.toLocaleTimeString('pt-BR', formatoHora)}h`
+  else if (dataAgora.toDateString() === amanha.toDateString()) return `amanhã às ${dataAgora.toLocaleTimeString('pt-BR', formatoHora)}h`
+
+  const dia = dataAgora.getDate()
+  const mes = converterMesParaNome(dataAgora.getMonth() + 1)
+  const ano = dataAgora.getFullYear()
+  const hora = String(dataAgora.getHours())?.padStart(2, '0')
+  const minuto = String(dataAgora.getMinutes())?.padStart(2, '0')
+
+  return `${dia} de ${mes} de ${ano} às ${hora}:${minuto}h`
+}
+
 export default {
   diferencaDeDiasEntreDatas,
   dataHoje,
@@ -260,18 +275,20 @@ export default {
   diasDaSemanaCompleto,
   numeroDiaDaSemana,
   contarDiasDoMes,
+
   avancarMes,
   voltarMes,
+
   avancarDia,
   voltarDia,
-  avancarMesLimitado,
-  voltarMesLimitado,
-  exibirDataServidorNoInputDate,
-  enviarInputDateParaServidor,
+
+  converterDataServidorParaInput,
+  converterDataInputParaServidor,
   receberDataDoServidor,
 
   agora,
   now,
+
   identificarDataFutura,
   identificarDataPassada,
 
@@ -282,14 +299,15 @@ export default {
 
   removeDias,
 
-  formatarData,
+  formatarDataSemHora,
   formatarDataComHora,
   printDateUSA,
-  formatarDataReduzida,
+  formatarDataAbreviada,
 
-  dataStringBRtoDate,
-  dataStringUSAtoDate,
-  dataObjtoDate,
+  converterDataUSAParaBR,
+  converterDataBRParaUSA,
+  converterObjDataParaString,
 
-  receberFusoHorario
+  receberFusoHorario,
+  acrescentarTempoNaDataAtual
 }
